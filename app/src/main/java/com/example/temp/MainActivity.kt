@@ -9,9 +9,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.enableEdgeToEdge
+import androidx.recyclerview.widget.LinearLayoutManager
 
 
 class MainActivity : ComponentActivity() {
+    private lateinit var notesAdapter: NotesAdapter
+    private val notesList = mutableListOf<Note>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -20,14 +24,16 @@ class MainActivity : ComponentActivity() {
         val addNotesIconImageViewId = findViewById<ImageView>(R.id.addNotesIconImageViewId)
         val recyclerViewId = findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerViewId)
 
+        notesAdapter = NotesAdapter(notesList)
+        recyclerViewId.layoutManager = LinearLayoutManager(this)
+        recyclerViewId.adapter = notesAdapter
+
         addNotesIconImageViewId.setOnClickListener {
             addNotes()
         }
-
-
     }
 
-    fun addNotes(){
+    private fun addNotes() {
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Add Note")
 
@@ -36,8 +42,11 @@ class MainActivity : ComponentActivity() {
         builder.setView(input)
 
         builder.setPositiveButton("OK") { dialog, _ ->
-            val note = input.text.toString()
-            Toast.makeText(applicationContext, note, Toast.LENGTH_SHORT).show()
+            val noteContent = input.text.toString()
+            if (noteContent.isNotEmpty()) {
+                val note = Note(noteContent)
+                notesAdapter.addNote(note)
+            }
             dialog.dismiss()
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
