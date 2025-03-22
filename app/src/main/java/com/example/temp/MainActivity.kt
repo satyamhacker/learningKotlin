@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
             dialog.dismiss()
+
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
 
