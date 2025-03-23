@@ -82,4 +82,12 @@ class NotesAdapter(private val notes: MutableList<Note>) : RecyclerView.Adapter<
         notes.add(note)
         notifyItemInserted(notes.size - 1)
     }
+
+    fun updateNotes(filteredList: MutableList<Note>) {
+
+        notes.clear()
+        notes.addAll(filteredList)
+        notifyDataSetChanged()
+
+    }
 }
